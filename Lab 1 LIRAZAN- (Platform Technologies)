@@ -47,4 +47,16 @@ void createDirectory() {
 	}
 }
 
-v
+void changeDirectory() {
+	cout << "CHANGE DIRECTORY" << endl;
+	cout << "-------------------" << endl;
+	cout << "1. Step by Step Backward" << endl;
+	cout << "2. Goto Root Directory" << endl;
+	cout << "3. Forward Directory" << endl;
+	int choice;
+	cin >> choice; // change directory by choice
+}
+
+int main() {
+	int choice;
+	do {
