@@ -2,3 +2,9 @@
 #include <windows.h> 
 #include <direct.h>  
 #include <string>
+
+using namespace std;
+
+void displayMenu() {
+    cout << "Directory Management System" << endl;
+    cout << "1. To Display List of Files" << endl;
