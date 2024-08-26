@@ -60,3 +60,10 @@ void changeDirectory() {
 int main() {
 	int choice;
 	do {
+		system("cls");
+		displayMenu();
+		cin >> choice;
+		switch (choice) {
+			case 1:
+				listFiles();
+				break;
