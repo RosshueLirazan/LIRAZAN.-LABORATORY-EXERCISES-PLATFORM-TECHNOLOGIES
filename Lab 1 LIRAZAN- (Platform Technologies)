@@ -1,10 +1,17 @@
 #include <iostream>
-#include <windows.h> 
-#include <direct.h>  
+#include <windows.h> // for system commands
+#include <direct.h>  // for directory functions
 #include <string>
-
+//ROSSHUE SHAUN A. LIRAZAN
 using namespace std;
 
 void displayMenu() {
-    cout << "Directory Management System" << endl;
-    cout << "1. To Display List of Files" << endl;
+	cout << "MAIN MENU" << endl;
+	cout << "--------------------" << endl;
+	cout << "Directory Management System" << endl;
+	cout << "1. To Display List of Files" << endl;
+	cout << "2. To Create New Directory" << endl;
+	cout << "3. To Change the Working Directory" << endl;
+	cout << "4. Exit" << endl;
+	cout << "Enter the Number: ";
+}
