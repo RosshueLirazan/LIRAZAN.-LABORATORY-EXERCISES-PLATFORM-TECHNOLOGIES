@@ -67,3 +67,19 @@ int main() {
 			case 1:
 				listFiles();
 				break;
+			case 2:
+				createDirectory();
+				break;
+			case 3:
+				changeDirectory();
+				break;
+			case 4:
+				cout << "EXITING..." << endl;
+				break;
+			default:
+				cout << "Invalid input. Please try again." << endl;
+		}
+		system("pause");
+	} while (choice != 4);
+	return 0;
+}
