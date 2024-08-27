@@ -1,7 +1,28 @@
 #include <iostream>
 #include <filesystem>
 #include <vector>
-
+//Rosshue Shaun A. Lirazan       LAB. 2
 namespace fs = std::filesystem;
 
-void
+void displayMenu();
+void listFiles();
+void createdDirectory();
+void changeDirectory();
+
+int main(){
+  int choice;
+
+  do{
+    displayMenu();
+    std::cout << "Enter the Number: ";
+    std::cin >> choice;
+
+switch (choice){
+  case 1:
+    listFiles();
+    break;
+  case 2:
+    createDirectory;
+    break;
+  case 3;
+
