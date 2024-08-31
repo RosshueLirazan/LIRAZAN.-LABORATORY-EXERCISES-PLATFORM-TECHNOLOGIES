@@ -1,15 +1,16 @@
 #include <iostream>
 #include <filesystem>
 #include <vector>
+
 //Rosshue Shaun A. Lirazan       LAB. 2
 namespace fs = std::filesystem;
 
 void displayMenu();
 void listFiles();
-void createdDirectory();
+void createDirectory();
 void changeDirectory();
 
-int main(){
+int main() {
   int choice;
 
   do{
@@ -22,12 +23,12 @@ switch (choice){
     listFiles();
     break;
   case 2:
-    createDirectory;
+    createDirectory();
     break;
-  case 3;
+  case 3:
     changeDirectory();
     break;
-  case 4;
+  case 4:
     std::cout << "Exiting...\n";
     return 0;
   default:
@@ -137,7 +138,6 @@ default:
 
 std::cout << "Current Directory: " << fs::current_path().string() << "\n";
 }
-  
 
 
        
