@@ -85,8 +85,58 @@ switch (option){
   }
 }
 
-void createDirectory(){
+void createDirectory() {
   std::string dirName;
+  std::cout << "Enter the Directory name: ";
+  std::cin >> dirName;
+
+if (fs::exists(dirName)) {
+  std::cout << dirName << " already exists.\n";
+} else {
+  if (fs::create_directory(dirName)) {
+    std::cout << dirName << " Directory Successfully Created\n"; 
+  } else {
+    std::cout << "Failed to create directory " << dirName << ".\n";
+    }
+  }  
+}
+
+
+void changeDirectory() {
+  int option;
+  std::string newDir;
+
+
+std::cout << "\nCurrent Directory: " << fs::current_path().string() << "\n";
+std::cout << "\t\tChange Directory\n\t\t----------------------\n";
+std::cout << "1. Step by Step Backward\n"; 
+std::cout << "2. Go to Root Directory\n"; 
+std::cout << "3. Forward Directory\n"; 
+std::cout << "Enter the number: "; 
+std::cin >> option;
+
+switch (option) {
+  case 1:
+    fs::current_path(fs::current_path().parent_path());
+    break;
+  case 2:
+    fs::current_path(fs::path("/"));
+    break;
+  case 3:
+    std::cout << "Enter the directory name: ";
+    std::cin >> newDir;
+    if (fs::exists(newDir) && fs::is_directory(newDir)) {
+      fs::current_path(newDir);
+  } else {
+      std::cout << "Directory does not exist.\n";
+  }
+  break;
+default:
+  std::cout << "Invalid option, returning to the main menu.\n";
+}
+
+std::cout << "Current Directory: " << fs::current_path().string() << "\n";
+}
   
 
 
