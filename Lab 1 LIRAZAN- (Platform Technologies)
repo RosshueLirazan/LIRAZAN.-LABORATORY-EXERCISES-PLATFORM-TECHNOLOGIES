@@ -1,85 +1,114 @@
 #include <iostream>
-#include <windows.h> // for system commands
+#include <windows.h> // for system commands and file operations
 #include <direct.h>  // for directory functions
 #include <string>
 //ROSSHUE SHAUN A. LIRAZAN
 using namespace std;
 
 void displayMenu() {
-	cout << "MAIN MENU" << endl;
-	cout << "--------------------" << endl;
-	cout << "Directory Management System" << endl;
-	cout << "1. To Display List of Files" << endl;
-	cout << "2. To Create New Directory" << endl;
-	cout << "3. To Change the Working Directory" << endl;
-	cout << "4. Exit" << endl;
-	cout << "Enter the Number: ";
+    cout << "MAIN MENU" << endl;
+    cout << "--------------------" << endl;
+    cout << "Directory Management System" << endl;
+    cout << "1. To Display List of Files" << endl;
+    cout << "2. To Create New Directory" << endl;
+    cout << "3. To Change the Working Directory" << endl;
+    cout << "4. Exit" << endl;
+    cout << "Enter the Number: ";
 }
 
 void listFiles() {
-	cout << "LIST FILE DETAIL" << endl;
-	cout << "--------------------" << endl;
-	cout << "1. List All Files" << endl;
-	cout << "2. List of Extension Files" << endl;
-	cout << "3. List of Name Wise" << endl;
-	int choice;
-	cin >> choice; // file listing by choice
-	
+    cout << "LIST FILE DETAIL" << endl;
+    cout << "--------------------" << endl;
+    cout << "1. List All Files" << endl;
+    cout << "2. List of Extension Files" << endl;
+    cout << "3. List of Name Wise" << endl;
+    int choice;
+    cin >> choice; // file listing by choice
+
+    // Get the current directory
+    char currentPath[FILENAME_MAX];
+    if (_getcwd(currentPath, sizeof(currentPath))) {
+        currentPath[sizeof(currentPath) - 1] = '\0'; // Ensure null-terminated string
+        string path = string(currentPath) + "\\*";
+        WIN32_FIND_DATA findFileData;
+        HANDLE hFind = FindFirstFile(path.c_str(), &findFileData);
+
+        if (hFind == INVALID_HANDLE_VALUE) {
+            cout << "Error retrieving files." << endl;
+            return;
+        }
+
+        do {
+            if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+                // Skip directories ('.' and '..' directories)
+                if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
+                    cout << "[DIR] " << findFileData.cFileName << endl;
+                }
+            } else {
+                // List files
+                cout << findFileData.cFileName << endl;
+            }
+        } while (FindNextFile(hFind, &findFileData) != 0);
+
+        FindClose(hFind);
+    } else {
+        cout << "Error retrieving the current directory path." << endl;
+    }
 }
 
 void createDirectory() {
-	string dirName;
-	cout << "Enter the Directory name: ";
-	cin >> dirName;
+    string dirName;
+    cout << "Enter the Directory name: ";
+    cin >> dirName;
 
-	// Create the directory
-	if (_mkdir(dirName.c_str()) == 0) {
-		//Get and display the current working directory
-		char currentPath[FILENAME_MAX];
-		if (_getcwd(currentPath, sizeof(currentPath))) {
-			currentPath[sizeof(currentPath) - 1] = '\0'; // Ensure null-terminated string
-			cout << "Directory successfully created at: " << currentPath << "\\" << dirName << endl;
-		} else {
-			cout << "Directory successfully created, but the current path could not be retrieved." << endl;
-		}
-	} else {
-		cout << "The directory couldn't be created due to an error." << endl;
-	}
+    // Create the directory
+    if (_mkdir(dirName.c_str()) == 0) {
+        //Get and display the current working directory
+        char currentPath[FILENAME_MAX];
+        if (_getcwd(currentPath, sizeof(currentPath))) {
+            currentPath[sizeof(currentPath) - 1] = '\0'; // Ensure null-terminated string
+            cout << "Directory successfully created at: " << currentPath << "\\" << dirName << endl;
+        } else {
+            cout << "Directory successfully created, but the current path could not be retrieved." << endl;
+        }
+    } else {
+        cout << "The directory couldn't be created due to an error." << endl;
+    }
 }
 
 void changeDirectory() {
-	cout << "CHANGE DIRECTORY" << endl;
-	cout << "-------------------" << endl;
-	cout << "1. Step by Step Backward" << endl;
-	cout << "2. Goto Root Directory" << endl;
-	cout << "3. Forward Directory" << endl;
-	int choice;
-	cin >> choice; // change directory by choice
+    cout << "CHANGE DIRECTORY" << endl;
+    cout << "-------------------" << endl;
+    cout << "1. Step by Step Backward" << endl;
+    cout << "2. Goto Root Directory" << endl;
+    cout << "3. Forward Directory" << endl;
+    int choice;
+    cin >> choice; // change directory by choice
 }
 
 int main() {
-	int choice;
-	do {
-		system("cls");
-		displayMenu();
-		cin >> choice;
-		switch (choice) {
-			case 1:
-				listFiles();
-				break;
-			case 2:
-				createDirectory();
-				break;
-			case 3:
-				changeDirectory();
-				break;
-			case 4:
-				cout << "EXITING..." << endl;
-				break;
-			default:
-				cout << "Invalid input. Please try again." << endl;
-		}
-		system("pause");
-	} while (choice != 4);
-	return 0;
+    int choice;
+    do {
+        system("cls");
+        displayMenu();
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                listFiles();
+                break;
+            case 2:
+                createDirectory();
+                break;
+            case 3:
+                changeDirectory();
+                break;
+            case 4:
+                cout << "EXITING..." << endl;
+                break;
+            default:
+                cout << "Invalid input. Please try again." << endl;
+        }
+        system("pause");
+    } while (choice != 4);
+    return 0;
 }
