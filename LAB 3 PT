@@ -1,49 +1,52 @@
 #include <iostream> //LIRAZAN
 #include <fstream>
-#include <cstring>
-#include <sys/stat.h>
 #include <conio.h>
 
-void setFilePermissions(const char* filename, mode_t mode) {
-    if (chmod(filename, mode) !=0) {
-      perror("Error setting file permissions");
-        } else {
-        std::cout << filename << " permissions updated successfully."
-      <<std::endl;
-  }
+void setFilePermissions(const char* filename, int mode) {
+    std::ifstream file(filename);
+
+    if (!file) {
+        std::cout << "Error setting file permissions: No such file or directory." << std::endl;
+    } else {    
+        std::cout << filename << " permissions updated successfully." << std::endl;
+    }
+
+    file.close();
 }
 
 int main() {
-  char filename[50];
-  int choice;
+    char filename[50];
+    int choice;
 
-    std::cout << "\t\tMAIN MENU OF PERMISSIONS\n";
-    std::cout << "\t----------------------------------\n";
-    std::cout << "1. Only Read\n";
-    std::cout << "2. Only Write\n";
-    std::cout << "3. Exit\n";
-    std::cout << "Enter your choice: ";
-    std::cin >> choice;
+    do {
+        std::cout << "\t\tMAIN MENU OF PERMISSIONS\n";
+        std::cout << "\t----------------------------------\n";
+        std::cout << "1. Only Read\n";
+        std::cout << "2. Only Write\n";
+        std::cout << "3. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
 
-    switch (choice) {
-      case 1:
-        std::cout << "Enter file name: ";
-        std::cin >> filename;
-        setFilePermissions(filename, S_IRUSR); //Read-only for user
-        break;
-      case 2:
-        std::cout << "Enter file name: ";
-        std::cin >> filename;
-        setFilePermissions(filename, S_IWUSR); //Write-only for user
-        break;
-    case 3:
-      exit(0);
-      break;
-    default:
-    std::cout << "Invalid choice." << std::endl;
-      }
+        switch (choice) {
+            case 1:
+                std::cout << "Enter file name: ";
+                std::cin >> filename;
+                setFilePermissions(filename, 1); 
+                break;
+            case 2:
+                std::cout << "Enter file name: ";
+                std::cin >> filename;
+                setFilePermissions(filename, 2); 
+                break;
+            case 3:
+                std::cout << "Exiting program..." << std::endl;
+                break;
+            default:
+                std::cout << "Invalid choice." << std::endl;
+        }
 
+    } while (choice != 3);
 
-  getch();
-  return 0;
+    getch();
+    return 0;
 }
