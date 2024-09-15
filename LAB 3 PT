@@ -3,3 +3,12 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <conio.h>
+
+void setFilePermissions(const char* filename, mode_t mode) {
+  if (chmod(filename, mode) !=0) {
+  perror("Error setting file permissions");
+    } else {
+  std::cout << filename << " permissions updated successfully."
+  <<std::endl;
+  }
+  }
