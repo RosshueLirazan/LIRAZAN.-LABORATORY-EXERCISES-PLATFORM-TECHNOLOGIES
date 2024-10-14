@@ -78,3 +78,25 @@ int main() {
         cout << "Option 3: Terminate Process" << endl;
         cout << "Option 4: Exit Program" << endl;
         cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                createChildProcess();
+                break;
+            case 2:
+                monitorProcess();
+                break;
+            case 3:
+                terminateProcess();
+                break;
+            case 4:
+                cout << "Exiting program." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
