@@ -1,13 +1,60 @@
-#include <iostream>
-#include <windows.h>  // For process management on Windows
-#include <string>
 
-using namespace std;
+    // Create a new child process (e.g., open "notepad.exe" for testing)
+    if (CreateProcess(
+            NULL,                // No module name (use command line)
+            (LPSTR)"notepad.exe", // Command line for the child process
+            NULL,                // Process handle not inheritable
+            NULL,                // Thread handle not inheritable
+            FALSE,               // Set handle inheritance to FALSE
+            0,                   // No creation flags
+            NULL,                // Use parent's environment block
+            NULL,                // Use parent's starting directory 
+            &si,                 // Pointer to STARTUPINFO structure
+            &pi)) {              // Pointer to PROCESS_INFORMATION structure
 
-HANDLE childProcess = NULL; // Global variable to store child process handle
-DWORD childProcessID = 0;   // Global variable to store child process ID
+        childProcess = pi.hProcess;
+        childProcessID = pi.dwProcessId;
+        cout << "New process created with PID: " << childProcessID << endl;
+    } else {
+        cout << "Failed to create process." << endl;
+    }
+}
 
-// Function to create a child process
-void createChildProcess() {
-    STARTUPINFO si = { sizeof(STARTUPINFO) };
-    PROCESS_INFORMATION pi;
+// Function to monitor the process state
+void monitorProcess() {
+    if (childProcess == NULL) {
+        cout << "No child process found to monitor." << endl;
+        return;
+    }
+
+    DWORD exitCode;
+    if (GetExitCodeProcess(childProcess, &exitCode)) {
+        if (exitCode == STILL_ACTIVE) {
+            cout << "Process ID: " << childProcessID << ", State: Running" << endl;
+        } else {
+            cout << "Process ID: " << childProcessID << ", State: Terminated" << endl;
+        }
+    } else {
+        cout << "Failed to get process status." << endl;
+    }
+}
+
+// Function to terminate the process
+void terminateProcess() {
+    if (childProcess == NULL) {
+        cout << "No child process found to terminate." << endl;
+        return;
+    }
+
+    if (TerminateProcess(childProcess, 0)) {
+        cout << "Process " << childProcessID << " terminated successfully." << endl;
+        CloseHandle(childProcess); // Clean up the handle
+        childProcess = NULL;
+    } else {
+        cout << "Failed to terminate process." << endl;
+    }
+}
+
+// Main function with menu options
+int main() {
+    int choice;
