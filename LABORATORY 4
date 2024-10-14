@@ -1,0 +1,13 @@
+#include <iostream>
+#include <windows.h>  // For process management on Windows
+#include <string>
+
+using namespace std;
+
+HANDLE childProcess = NULL; // Global variable to store child process handle
+DWORD childProcessID = 0;   // Global variable to store child process ID
+
+// Function to create a child process
+void createChildProcess() {
+    STARTUPINFO si = { sizeof(STARTUPINFO) };
+    PROCESS_INFORMATION pi;
