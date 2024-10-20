@@ -24,3 +24,73 @@ void calculateTimes(Process processes[], int n) {
         completionTime[i] = completionTime[i - 1] + processes[i].burstTime;
         processes[i].waitingTime = completionTime[i - 1] - processes[i].arrivalTime;
         processes[i].turnaroundTime = processes[i].waitingTime + processes[i].burstTime;
+        
+        // Adjusting negative waiting times to zero
+        if (processes[i].waitingTime < 0) {
+            processes[i].waitingTime = 0;
+        }
+    }
+}
+
+// Function to display the process table and calculate average times
+void displayResults(Process processes[], int n) {
+    float totalWaitingTime = 0, totalTurnaroundTime = 0;
+    
+    cout << "\nProcess Table:\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "Process ID  Arrival Time  Burst Time  Waiting Time  Turnaround Time\n";
+    cout << "-----------------------------------------------------------\n";
+    
+    for (int i = 0; i < n; i++) {
+        totalWaitingTime += processes[i].waitingTime;
+        totalTurnaroundTime += processes[i].turnaroundTime;
+        
+        cout << setw(9) << processes[i].id 
+             << setw(13) << processes[i].arrivalTime 
+             << setw(11) << processes[i].burstTime 
+             << setw(13) << processes[i].waitingTime 
+             << setw(17) << processes[i].turnaroundTime << endl;
+    }
+    
+    cout << "-----------------------------------------------------------\n";
+    cout << fixed << setprecision(2);
+    cout << "Average Waiting Time: " << totalWaitingTime / n << endl;
+    cout << "Average Turnaround Time: " << totalTurnaroundTime / n << endl;
+}
+
+int main() {
+    int n;
+    
+    // Input: Number of processes
+    cout << "Enter the number of processes: ";
+    cin >> n;
+    
+    Process processes[n];
+    
+    // Input for Arrival Time and Burst Time for each process
+    cout << "Enter Process ID, Arrival Time, Burst Time for each process:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Process " << i + 1 << ": Arrival Time = ";
+        cin >> processes[i].arrivalTime;
+        cout << "Burst Time = ";
+        cin >> processes[i].burstTime;
+        processes[i].id = i + 1;
+    }
+    
+    // Sort processes based on arrival time (FCFS Scheduling)
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (processes[i].arrivalTime > processes[j].arrivalTime) {
+                swap(processes[i], processes[j]);
+            }
+        }
+    }
+    
+    // Calculate waiting time and turnaround time
+    calculateTimes(processes, n);
+    
+    // Display process table and average times
+    displayResults(processes, n);
+    
+    return 0;
+}
