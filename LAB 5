@@ -1,1 +1,26 @@
+#include <iostream> //LIRAZAN
+#include <iomanip>
 
+using namespace std;
+
+struct Process {
+    int id;             // Process ID
+    int arrivalTime;     // Arrival Time
+    int burstTime;       // Burst Time
+    int waitingTime;     // Waiting Time
+    int turnaroundTime;  // Turnaround Time
+};
+
+// Function to calculate waiting and turnaround times
+void calculateTimes(Process processes[], int n) {
+    int completionTime[n];
+    
+    // Calculating completion time of each process
+    completionTime[0] = processes[0].arrivalTime + processes[0].burstTime;
+    processes[0].waitingTime = 0;
+    processes[0].turnaroundTime = processes[0].burstTime;
+    
+    for (int i = 1; i < n; i++) {
+        completionTime[i] = completionTime[i - 1] + processes[i].burstTime;
+        processes[i].waitingTime = completionTime[i - 1] - processes[i].arrivalTime;
+        processes[i].turnaroundTime = processes[i].waitingTime + processes[i].burstTime;
