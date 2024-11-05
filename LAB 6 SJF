@@ -2,3 +2,15 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
+
+
+
+
+// Structure of the process
+struct Process {
+    int id;          // Process ID
+    int arrivalTime; // Arrival time of the process
+    int burstTime;   // Burst time of the process
+    int waitingTime; // Waiting time of the process
+    int turnaroundTime; // Turnaround time of the process
+};
