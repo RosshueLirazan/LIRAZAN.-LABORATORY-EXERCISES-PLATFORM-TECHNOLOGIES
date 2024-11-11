@@ -1,0 +1,12 @@
+#include <iostream> //LIRAZAN LABORTATORY 7
+#include <vector>
+#include <iomanip>
+#include <climits>
+
+using namespace std;
+
+struct Process {
+    int id;
+    int arrivalTime;
+    int burstTime;
+    int remainingTime;
