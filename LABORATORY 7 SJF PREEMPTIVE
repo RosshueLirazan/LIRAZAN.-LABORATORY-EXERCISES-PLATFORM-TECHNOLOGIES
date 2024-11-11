@@ -70,3 +70,20 @@ int main() {
             totalTurnaroundTime += processes[shortest].turnaroundTime;
 
             completedProcesses++;
+        }
+    }
+
+    // Print the result
+    cout << "\nProcess\tArrival\tBurst\tCompletion\tWaiting\tTurnaround\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << processes[i].id << "\t" << processes[i].arrivalTime << "\t" 
+             << processes[i].burstTime << "\t" << processes[i].completionTime << "\t\t"
+             << processes[i].waitingTime << "\t" << processes[i].turnaroundTime << "\n";
+    }
+
+    cout << fixed << setprecision(2);
+    cout << "\nAverage Waiting Time: " << (totalWaitingTime / n) << endl;
+    cout << "Average Turnaround Time: " << (totalTurnaroundTime / n) << endl;
+
+    return 0;
+}
