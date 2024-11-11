@@ -10,3 +10,32 @@ struct Process {
     int arrivalTime;
     int burstTime;
     int remainingTime;
+
+
+    int turnaroundTime;
+};
+
+int main() {
+    int n;
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    vector<Process> processes(n);
+
+    for (int i = 0; i < n; i++) {
+        processes[i].id = i + 1;
+        cout << "Enter arrival time for process " << i + 1 << ": ";
+        cin >> processes[i].arrivalTime;
+        cout << "Enter burst time for process " << i + 1 << ": ";
+        cin >> processes[i].burstTime;
+        processes[i].remainingTime = processes[i].burstTime;
+    }
+
+    int currentTime = 0;
+    int completedProcesses = 0;
+    double totalWaitingTime = 0;
+    double totalTurnaroundTime = 0;
+
+    while (completedProcesses < n) {
+        int shortest = -1;
+        int minRemainingTime = INT_MAX;
