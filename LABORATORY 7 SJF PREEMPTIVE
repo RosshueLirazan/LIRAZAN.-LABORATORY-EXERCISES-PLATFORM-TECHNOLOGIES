@@ -10,8 +10,8 @@ struct Process {
     int arrivalTime;
     int burstTime;
     int remainingTime;
-
-
+    int completionTime;
+    int waitingTime;
     int turnaroundTime;
 };
 
@@ -39,3 +39,34 @@ int main() {
     while (completedProcesses < n) {
         int shortest = -1;
         int minRemainingTime = INT_MAX;
+
+        // Find the process with the shortest remaining time that has arrived
+        for (int i = 0; i < n; i++) {
+            if (processes[i].arrivalTime <= currentTime && 
+                processes[i].remainingTime > 0 && 
+                processes[i].remainingTime < minRemainingTime) {
+                minRemainingTime = processes[i].remainingTime;
+                shortest = i;
+            }
+        }
+
+        if (shortest == -1) {
+            // No process is ready, move time forward
+            currentTime++;
+            continue;
+        }
+
+        // Process the selected process for one unit of time
+        processes[shortest].remainingTime--;
+        currentTime++;
+
+        // If the process is completed
+        if (processes[shortest].remainingTime == 0) {
+            processes[shortest].completionTime = currentTime;
+            processes[shortest].turnaroundTime = processes[shortest].completionTime - processes[shortest].arrivalTime;
+            processes[shortest].waitingTime = processes[shortest].turnaroundTime - processes[shortest].burstTime;
+
+            totalWaitingTime += processes[shortest].waitingTime;
+            totalTurnaroundTime += processes[shortest].turnaroundTime;
+
+            completedProcesses++;
