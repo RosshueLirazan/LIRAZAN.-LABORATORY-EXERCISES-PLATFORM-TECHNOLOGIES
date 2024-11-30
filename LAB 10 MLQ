@@ -1,0 +1,39 @@
+#include <iostream> //LIRAZAN
+#include <vector>
+#include <iomanip>
+#include <algorithm>
+using namespace std;
+
+struct Process {
+    char id;             // Process ID (e.g., A, B, C)
+    int arrivalTime;     // Arrival Time
+    int burstTime;       // Burst Time
+    int priority;        // Priority (lower value = higher priority)
+    int queueLevel;      // Queue Level (1, 2, or 3)
+    int completionTime;  // Completion Time
+    int turnaroundTime;  // Turnaround Time
+    int waitingTime;     // Waiting Time
+    int remainingTime;   // Remaining Time (for Round Robin)
+};
+
+// Comparator for sorting by Priority and Arrival Time
+bool compareByPriorityAndArrival(Process a, Process b) {
+    if (a.priority == b.priority) {
+        return a.arrivalTime < b.arrivalTime; // Sort by Arrival Time if Priority is equal
+    }
+    return a.priority < b.priority; // Sort by Priority
+}
+
+// First-Come-First-Serve Scheduling
+void fcfsScheduling(vector<Process> &queue) {
+    int currentTime = 0;
+
+    for (size_t i = 0; i < queue.size(); i++) {
+        Process &p = queue[i];
+        if (currentTime < p.arrivalTime) {
+            currentTime = p.arrivalTime; // Handle idle time
+        }
+        p.completionTime = currentTime + p.burstTime;
+        p.turnaroundTime = p.completionTime - p.arrivalTime;
+        p.waitingTime = p.turnaroundTime - p.burstTime;
+        currentTime = p.completionTime;
