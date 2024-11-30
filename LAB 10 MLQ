@@ -37,3 +37,109 @@ void fcfsScheduling(vector<Process> &queue) {
         p.turnaroundTime = p.completionTime - p.arrivalTime;
         p.waitingTime = p.turnaroundTime - p.burstTime;
         currentTime = p.completionTime;
+    }
+}
+
+// Round Robin Scheduling
+void roundRobinScheduling(vector<Process> &queue, int timeQuantum) {
+    int currentTime = 0;
+    bool isDone;
+
+    do {
+        isDone = true;
+        for (size_t i = 0; i < queue.size(); i++) {
+            Process &p = queue[i];
+            if (p.remainingTime > 0) {
+                isDone = false;
+                if (currentTime < p.arrivalTime) {
+                    currentTime = p.arrivalTime; // Adjust for idle time
+                }
+                if (p.remainingTime > timeQuantum) {
+                    currentTime += timeQuantum;
+                    p.remainingTime -= timeQuantum;
+                } else {
+                    currentTime += p.remainingTime;
+                    p.remainingTime = 0;
+                    p.completionTime = currentTime;
+                    p.turnaroundTime = p.completionTime - p.arrivalTime;
+                    p.waitingTime = p.turnaroundTime - p.burstTime;
+                }
+            }
+        }
+    } while (!isDone);
+}
+
+// Display Process Table
+void displayProcesses(vector<Process> &processes) {
+    cout << "\nProcess Table:\n";
+    cout << "-----------------------------------------------------------------------------------\n";
+    cout << "Process  Arrival Time  Burst Time  Priority  Queue Level  Completion Time  TAT  Waiting Time\n";
+    cout << "-----------------------------------------------------------------------------------\n";
+
+    float totalTAT = 0, totalWT = 0;
+    for (size_t i = 0; i < processes.size(); i++) {
+        Process &p = processes[i];
+        cout << setw(7) << p.id
+             << setw(14) << p.arrivalTime
+             << setw(11) << p.burstTime
+             << setw(10) << p.priority
+             << setw(12) << p.queueLevel
+             << setw(17) << p.completionTime
+             << setw(6) << p.turnaroundTime
+             << setw(14) << p.waitingTime << endl;
+        totalTAT += p.turnaroundTime;
+        totalWT += p.waitingTime;
+    }
+    cout << "-----------------------------------------------------------------------------------\n";
+    cout << "Average Turnaround Time: " << totalTAT / processes.size() << endl;
+    cout << "Average Waiting Time: " << totalWT / processes.size() << endl;
+}
+
+int main() {
+    int n, timeQuantum = 4;
+
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    vector<Process> queue1, queue2, queue3;
+
+    // Input Process Details
+    for (int i = 0; i < n; i++) {
+        Process p;
+        cout << "Enter Process ID (e.g., A, B), Arrival Time, Burst Time, Priority, and Queue Level: ";
+        cin >> p.id >> p.arrivalTime >> p.burstTime >> p.priority >> p.queueLevel;
+        p.remainingTime = p.burstTime;
+
+        if (p.queueLevel == 1) {
+            queue1.push_back(p); // High Priority (FCFS)
+        } else if (p.queueLevel == 2) {
+            queue2.push_back(p); // Medium Priority (Round Robin)
+        } else if (p.queueLevel == 3) {
+            queue3.push_back(p); // Low Priority (FCFS)
+        }
+    }
+
+    // Sort queues by Priority and Arrival Time
+    sort(queue1.begin(), queue1.end(), compareByPriorityAndArrival);
+    sort(queue3.begin(), queue3.end(), compareByPriorityAndArrival);
+
+    // Perform Scheduling
+    cout << "\nScheduling Queue 1 (High Priority - FCFS)...\n";
+    fcfsScheduling(queue1);
+
+    cout << "\nScheduling Queue 2 (Medium Priority - Round Robin)...\n";
+    roundRobinScheduling(queue2, timeQuantum);
+
+    cout << "\nScheduling Queue 3 (Low Priority - FCFS)...\n";
+    fcfsScheduling(queue3);
+
+    // Combine Results
+    vector<Process> allProcesses = queue1;
+    allProcesses.insert(allProcesses.end(), queue2.begin(), queue2.end());
+    allProcesses.insert(allProcesses.end(), queue3.begin(), queue3.end());
+
+    // Display Results
+    displayProcesses(allProcesses);
+
+    return 0;
+}
